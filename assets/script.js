@@ -45,12 +45,8 @@ localStorage.setItem("loseCount", loseCounter);
 
 
 }
-
-imageContainer.addEventListener("click", function(event) {
-    var element = event.target;
-    // Checks to make sure it is the start button that was pressed
-    if (element.matches(".start-button")) {
-        startTimer();
-        startGame();
-    };
+var startButton = document.querySelector(".start-quiz");
+startButton.addEventListener("click", function() {
+    startTimer();
+    startGame();
 });
