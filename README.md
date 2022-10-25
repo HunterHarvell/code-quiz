@@ -23,3 +23,4 @@ THEN I can save my initials and score
 
 Link to deployed application: https://hunterharvell.github.io/code-quiz/
 Link to repository: https://github.com/HunterHarvell/code-quiz.git
+![Screenshot](./assets/screenshot.png?raw=true "Screenshot")
