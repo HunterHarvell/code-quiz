@@ -1,4 +1,5 @@
 # code-quiz
+This application is a timed quiz over coding. It has 5 questions, and 75 seconds to answer. For every wrong answer you will lose 10 seconds of time. Complete the quiz and you'll be able to save your score in the high score list!
 
 ## User Story
 AS A coding boot camp student
@@ -17,3 +18,8 @@ WHEN all questions are answered or the timer reaches 0
 THEN the game is over
 WHEN the game is over
 THEN I can save my initials and score
+
+## Deployed Application
+
+Link to deployed application: https://hunterharvell.github.io/code-quiz/
+Link to repository: https://github.com/HunterHarvell/code-quiz.git

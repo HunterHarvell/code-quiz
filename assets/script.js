@@ -3,6 +3,7 @@ var timerEl = document.getElementById('timer');
 var displayDiv = document.getElementById('display');
 var questionEl = document.getElementById('question');
 var startPrompt = document.getElementById('startPrompt');
+var response = document.getElementById("response");
 
 // Question array
 let questions = [
@@ -65,6 +66,17 @@ function startTimer() {
     }, 1000);
 }
 
+function answerisCorrect() {
+    response.textContent = "Correct!";
+}
+
+function answerisWrong() {
+    response.textContent = "Wrong!";
+    timerCount = timerCount-10;
+}
+// sets index to cycle questions
+var lastQuestionIndex = questions.length-1;
+var runningQuestionIndex = 0;
 function startGame() {
     startButton.setAttribute("style", "display: none");
     startPrompt.setAttribute("style", "display: none");
@@ -82,24 +94,35 @@ function startGame() {
     displayDiv.appendChild(b3);
     displayDiv.appendChild(b4);
 
+    function renderQuestion() {
+        let q = questions[runningQuestionIndex];
+        questionEl.textContent = q.question;
+        b1.textContent = q.choiceA;
+        b2.textContent = q.choiceB;
+        b3.textContent = q.choiceC;
+        b4.textContent = q.choiceD;
+    }
+    // checks our answer and displays the corresponding text
+    function checkAnswer() {
+        if(questions[runningQuestionIndex].correct == answer) {
+            answerisCorrect();
+        } else{
+            answerisWrong();
+        }
+        if(runningQuestionIndex == lastQuestionIndex) {
+            function endGame() {
+                var score = timerCount;
 
-    // Question 1
-    questionEl.textContent = "";
-    b1.textContent = "boolean";
-    b2.textContent = "number";
-    b3.textContent = "strings";
-    b4.textContent = "alerts";
-
-    displayDiv.addEventListener("click", function() {
-    });
+            }
+        }
+    }
+    renderQuestion();
+    var answer = displayDiv.addEventListener("click", "")
+    checkAnswer();
+    runningQuestionIndex++;
 }
 
-function endGame() {
-    
-localStorage.setItem("loseCount", loseCounter);
-
-
-}
+// start button
 var startButton = document.querySelector(".start-quiz");
 startButton.addEventListener("click", function() {
     startTimer();
