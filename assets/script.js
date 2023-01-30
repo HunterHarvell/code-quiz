@@ -5,7 +5,7 @@ let secondsLeft = 75;
 let scoreEl = document.getElementById("#score");
 
 // start prompt
-const startPrompt = document.getElementById('#start');
+const startPrompt = document.querySelector("#start");
 
 // quiz section
 const quizEl = document.getElementById('#quiz');
@@ -94,65 +94,125 @@ function setTimer() {
     }, 1000);
 }
 
-function answerisCorrect() {
-    response.textContent = "Correct!";
+function startQuiz() {
+    startPrompt.style.display = "none";
+    quizEl.style.display = "block";
+    questionCount = 0;
+
+    setTimer();
+    setQuestion(questionCount);   
 }
 
-function answerisWrong() {
-    response.textContent = "Wrong!";
-    timerCount = timerCount-10;
-}
-// sets index to cycle questions
-var lastQuestionIndex = questions.length-1;
-var runningQuestionIndex = 0;
-function startGame() {
-    startButton.setAttribute("style", "display: none");
-    startPrompt.setAttribute("style", "display: none");
-    // Create ordered list items
-    var b1 = document.createElement("button")
-    b1.className += "btn";
-    var b2 = document.createElement("button")
-    b2.className += "btn";
-    var b3 = document.createElement("button")
-    b3.className += "btn";
-    var b4 = document.createElement("button")
-    b4.className += "btn";
-    displayDiv.appendChild(b1);
-    displayDiv.appendChild(b2);
-    displayDiv.appendChild(b3);
-    displayDiv.appendChild(b4);
-
-    function renderQuestion() {
-        let q = questions[runningQuestionIndex];
-        questionEl.textContent = q.question;
-        b1.textContent = q.choiceA;
-        b2.textContent = q.choiceB;
-        b3.textContent = q.choiceC;
-        b4.textContent = q.choiceD;
+function setQuestion(id) {
+    if (id < questions.length) {
+        question.textContent = questions[id].question;
+        ansBtn1.textContent = questions[id].answers[0];
+        ansBtn2.textContent = questions[id].answers[1];
+        ansBtn3.textContent = questions[id].answers[2];
+        ansBtn4.textContent = questions[id].answers[3];
     }
-    // checks our answer and displays the corresponding text
-    function checkAnswer() {
-        if(questions[runningQuestionIndex].correct == answer) {
-            answerisCorrect();
-        } else{
-            answerisWrong();
-        }
-        if(runningQuestionIndex == lastQuestionIndex) {
-            function endGame() {
-                var score = timerCount;
-
-            }
-        }
-    }
-    renderQuestion();
-    var answer = displayDiv.addEventListener("click", "")
-    checkAnswer();
-    runningQuestionIndex++;
 }
 
-// start button
-var startButton = document.querySelector(".start-quiz");
-startButton.addEventListener("click", function() {
-    startTimer();
-    startGame();
+function checkAnswer(event) {
+    event.preventDefault();
+
+    // show section
+    answerCheck.style.display = "block";
+    let p = document.createElement('p');
+    answerCheck.appendChild(p);
+
+    // set timeout
+    setTimeout(function () {
+        p.style.display = "none";
+    }, 1000);
+
+    // display response
+    if (questions[questionCount].correctAnswer === event.target.value) {
+        p.textContent = "Correct Answer";
+    } else if (questions[questionCount].correctAnswer !== event.target.value) {
+        secondsLeft = secondsLeft - 10;
+        p.textContent = "wrong";
+    }
+
+    // increment question number
+    if (questionCount < questions.length) {
+        questionCount++;
+    }
+
+    // set next question
+    setQuestion(questionCount);
+}
+
+function addScore(event) {
+    event. preventDefault();
+
+    enterHS.style.display = "none";
+    highscores.style.display = "block";
+
+    let init = initialsInput.value.toUpperCase();
+    scoreList.push({ initials: init, score: secondsLeft });
+
+    scoreList = scoreList.sort((a, b) => {
+        if (a.score < b.score) {
+            return 1;
+        } else {
+            return -1;
+        }
+    });
+
+    scoreList.innerHTML="";
+    for (let i = 0; i < scoreList.length; i++) {
+        let li = document.createElement("li");
+        li.textContent = '${scoreList[i].initials}: ${scoreList[i].score}';
+        scoreList.append(li);
+    }
+
+    storeScores();
+    displayScores();
+}
+
+function storeScores() {
+    localStorage.setItem("scoreList", JSON.stringify(scoreList));
+}
+
+function displayScores() {
+    let storedScoreList = JSON.parse(localStorage.getItem("scoreList"));
+
+    if (storedScoreList !== null) {
+        scoreList = storedScoreList;
+    }
+}
+
+function clearScores() {
+    localStorage.clear();
+    scoreListEl.innerHTML="";
+}
+
+// Event Listeners
+startBtn.addEventListener("click", startQuiz);
+
+ansBtn.forEach(item => {
+    item.addEventListener("click", checkAnswer);
 });
+
+submitScoreBtn.addEventListener("click", addScore);
+
+goBackBtn.addEventListener("click", function () {
+    highscores.style.display = "none";
+    startPrompt.style.display = "block";
+    secondsLeft = 75;
+    timerEl.textContent = 'Time Remaining: ${secondsLeft}';
+});
+
+clearScrBtn.addEventListener("click", clearScores);
+
+viewHSBtn.addEventListener("click", function () {
+    if (highscores.style.display === "none") {
+        highscores.style.display = "block";
+    } else if (highscores.style.display === "block") {
+        highscores.style.display = "none";
+    } else {
+        return alert("No scores to show.");
+    }
+});
+
