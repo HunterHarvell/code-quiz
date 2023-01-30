@@ -4,6 +4,13 @@
     font-family:'Times New Roman', Times, serif;
 }
 
+#quiz,
+#enterHS,
+#highscores,
+#answerCheck {
+    display: none;  
+  } 
+
 #display {
     text-align: center;
     border-width: 10px;
@@ -14,7 +21,7 @@
 
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 section {
